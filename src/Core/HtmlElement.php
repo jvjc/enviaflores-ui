@@ -3,6 +3,7 @@
 namespace Enviaflores\UI\Core;
 
 use Enviaflores\UI\Atoms\UI\TextNode;
+use Enviaflores\UI\Traits\BootstrapVisibility;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -10,6 +11,8 @@ use InvalidArgumentException;
 
 class HtmlElement implements Htmlable
 {
+    use BootstrapVisibility;
+
     protected array $attributes = [];
 
     protected array $children = [];
@@ -27,11 +30,19 @@ class HtmlElement implements Htmlable
 
     public function id($id): static
     {
+        if (empty($id)) {
+            return $this;
+        }
+
         return $this->attribute('id', $id);
     }
 
-    public function name($name): static
+    public function name(string $name): static
     {
+        if (empty($name)) {
+            return $this;
+        }
+
         return $this->attribute('name', $name);
     }
 
@@ -61,16 +72,24 @@ class HtmlElement implements Htmlable
 
     public function class(string|array $class): static
     {
-        $class = is_array($class) ? Arr::toCssClasses($class) : $class;
+        $class = is_string($class) ? [$class] : $class;
 
-        return $this->attribute('class', $class);
+        $existingClasses = ! empty($this->attributes['class']) ? explode(' ', $this->attributes['class']) : [];
+
+        $mergedClasses = array_unique(array_merge($existingClasses, $class));
+
+        return $this->attribute('class', Arr::toCssClasses($mergedClasses));
     }
 
     public function style(string|array $style): static
     {
-        $style = is_array($style) ? Arr::toCssStyles($style) : $style;
+        $style = is_string($style) ? [$style] : $style;
 
-        return $this->attribute('style', $style);
+        $existingStyles = ! empty($this->attributes['style']) ? Arr::toCssStyles($this->attributes['style']) : [];
+
+        $mergedStyles = array_unique(array_merge($existingStyles, $style));
+
+        return $this->attribute('style', Arr::toCssStyles($mergedStyles));
     }
 
     public function content(array|HtmlElement|TextNode|string $children): static
@@ -113,15 +132,5 @@ class HtmlElement implements Htmlable
         $html .= '</'.Str::lower(class_basename($this->tag)).'>';
 
         return $html;
-    }
-
-    public static function make(string $name = ''): static
-    {
-        $element = new static();
-        if (! empty($name)) {
-            $element->attribute('name', $name);
-        }
-
-        return $element;
     }
 }

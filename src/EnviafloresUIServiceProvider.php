@@ -12,10 +12,10 @@ class EnviafloresUIServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'enviaflores-ui');
-
         $this->publishes([
-            __DIR__.'/../resources/js' => public_path('vendor/enviaflores-ui/js'),
+            __DIR__.'/../public' => public_path('vendor/enviaflores/ui'),
         ], 'public');
+
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'enviaflores-ui');
     }
 }

@@ -1,3 +1,6 @@
 @extends('enviaflores-ui::layouts.simple')
-Package Page
-{{ $ui }}
+
+@section('content')
+    <h2>Package Page</h2>
+    {{ $ui }}
+@endsection
