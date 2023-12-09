@@ -1,0 +1,30 @@
+{
+  "name": "enviaflores/ui",
+  "description": "description",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "victor@enviaflores.com",
+      "email": "desarrolladorphp@enviaflores.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Enviaflores\\UI\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Enviaflores\\UI\\EnviafloresUIServiceProvider"
+      ]
+    }
+  },
+  "require-dev": {
+    "illuminate/contracts": "^10.35",
+    "illuminate/view": "^10.35",
+    "laravel/pint": "dev-main"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": false
+}
